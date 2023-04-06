@@ -44,7 +44,7 @@ def home():
     return render_template("index.html", movies=all_movies)
 
 
-@app.route("/<int:id>", methods=['GET', 'POST'])
+@app.route("/edit/<int:id>", methods=['GET', 'POST'])
 def edit_rating(id):
     form = RateMovieForm()
     if form.validate_on_submit():
@@ -54,6 +54,15 @@ def edit_rating(id):
         db.session.commit()
         return redirect(url_for("home"))
     return render_template("edit.html", form=form)
+
+
+@app.route("/delete")
+def delete_movie():
+    movie_id = request.args.get("id")
+    movie_to_delete = Movie.query.get(movie_id)
+    db.session.delete(movie_to_delete)
+    db.session.commit()
+    return redirect(url_for("home"))
 
 
 if __name__ == '__main__':
