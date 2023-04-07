@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FloatField
 from wtforms.validators import DataRequired, NumberRange
-import requests, os
+import requests
+import os
 
 
 # Creating Database
@@ -22,7 +23,6 @@ MOVIE_DB_API_KEY = os.environ.get("TMDB_API_KEY")
 TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w500'
 
 
-
 # Creating Table
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,7 +30,7 @@ class Movie(db.Model):
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(150))
     rating = db.Column(db.Float)
-    ranking = db.Column(db.Integer, unique=True)
+    ranking = db.Column(db.Integer)
     review = db.Column(db.Text)
     img_url = db.Column(db.String(250), unique=True, nullable=False)
 
@@ -39,6 +39,7 @@ class Movie(db.Model):
 
 
 db.create_all()
+
 
 # Flask Forms
 class RateMovieForm(FlaskForm):
@@ -50,6 +51,7 @@ class RateMovieForm(FlaskForm):
 class FindMovieForm(FlaskForm):
     title = StringField(label="Movie Title", validators=[DataRequired()])
     submit = SubmitField(label="Add Movie")
+
 
 # Routes
 @app.route("/")
